@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString } from '@nestjs/class-validator';
 
-export class CreateUserDTO {
+export class CreateCourseDTO {
   @IsNotEmpty()
   @IsString()
   name: string;
@@ -10,8 +10,10 @@ export class CreateUserDTO {
   price: number;
 
   @IsNotEmpty()
-  level: string;
+  @IsNumber()
+  levelId: number;
 
   @IsNotEmpty()
-  skill: string;
+  @IsNumber()
+  skillId: number;
 }

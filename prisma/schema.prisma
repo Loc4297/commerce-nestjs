@@ -30,7 +30,7 @@ model Cart {
   courseId Int
   courses Course @relation(fields: [courseId], references: [id])
 
-  couponId Int
+  couponId Int?
   coupons Coupon? @relation(fields: [couponId], references: [id])
   
   cartTotal Int
@@ -43,6 +43,7 @@ model Cart {
 
 model Course {
   id Int @id @default(autoincrement())
+  name String @unique
   price Int
 
   levelId Int

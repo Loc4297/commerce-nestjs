@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsString,
 } from '@nestjs/class-validator';
+import { IsOptional } from 'class-validator';
 
 export class RegisterDTO {
   @IsNotEmpty()
@@ -20,5 +21,6 @@ export class RegisterDTO {
   password: string;
 
   @IsBoolean()
-  isAdmin: boolean;
+  @IsOptional()
+  isAdmin?: boolean;
 }

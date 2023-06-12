@@ -26,6 +26,7 @@ CREATE TABLE "carts" (
 -- CreateTable
 CREATE TABLE "courses" (
     "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
     "levelId" INTEGER NOT NULL,
     "skillId" INTEGER NOT NULL,

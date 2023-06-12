@@ -1,33 +1,33 @@
+import { DataSource } from 'typeorm';
+import JwtAuthenticationGuard from 'src/auth/guard/jwt-authentication.guard';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { UserService } from './user.service';
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { Request } from 'express';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthenticationGuard)
   @Get()
   getAllUsers() {
     return this.userService.getAllUsers();
   }
 
-  @Get(':id')
-  getDetailUser(@Param() params: { id: string }) {
-    try {
-      const id = JSON.parse(params.id);
-      return this.userService.getDetailUser(id);
-    } catch (error) {
-      return [];
-    }
+  @UseGuards(JwtAuthenticationGuard)
+  @Get('me')
+  getDetailUser(@Req() request: Request) {
+    console.log(typeof request.user);
+    return request.user;
   }
-
-  // @Patch(':id')
-  // updateUser(
-  //   @Param() params: { id: string },
-  //   @Body() updateData: UpdateUserDTO,
-  // ) {
-  //   try {
-  //     const id = JSON.parse(params.id);
-  //   } catch (error) {}
-  // }
 }
