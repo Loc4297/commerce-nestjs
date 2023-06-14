@@ -1,6 +1,4 @@
-import { DataSource } from 'typeorm';
 import JwtAuthenticationGuard from 'src/auth/guard/jwt-authentication.guard';
-import { UpdateUserDTO } from './dto/update-user.dto';
 import { UserService } from './user.service';
 import {
   Body,
@@ -20,14 +18,17 @@ export class UserController {
 
   @UseGuards(JwtAuthenticationGuard)
   @Get()
-  getAllUsers() {
-    return this.userService.getAllUsers();
+  getAllUsers(@Req() request) {
+    if (request.user.isAdmin) {
+      return this.userService.getAllUsers();
+    } else {
+      return [];
+    }
   }
 
   @UseGuards(JwtAuthenticationGuard)
   @Get('me')
   getDetailUser(@Req() request: Request) {
-    console.log(typeof request.user);
     return request.user;
   }
 }

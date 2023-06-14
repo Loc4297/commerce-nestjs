@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { SkillService } from './skill.service';
 import { CreateSkillDTO } from './dto/create-skill.dto';
+import JwtAuthenticationGuard from 'src/auth/guard/jwt-authentication.guard';
 
 @Controller('skills')
 export class SkillController {
@@ -11,8 +12,13 @@ export class SkillController {
     return this.skillService.getAllSkills();
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Post()
-  createSkill(@Body() data: CreateSkillDTO) {
-    return this.skillService.createSkill(data);
+  createSkill(@Body() data: CreateSkillDTO, @Req() request) {
+    if (request.user.isAdmin) {
+      return this.skillService.createSkill(data);
+    } else {
+      return "You're not allowed to do that!";
+    }
   }
 }

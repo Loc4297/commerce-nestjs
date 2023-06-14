@@ -1,18 +1,32 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CreateCourseDTO } from './dto/create-course.dto';
+import JwtAuthenticationGuard from 'src/auth/guard/jwt-authentication.guard';
 
 @Controller('course')
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
   @Get()
-  getAllCourses() {
+  async getAllCourses() {
     return this.courseService.getAllCourses();
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Post()
-  createCourse(@Body() data: CreateCourseDTO) {
-    return this.courseService.createCourse(data);
+  createCourse(@Body() data: CreateCourseDTO, @Req() request) {
+    if (request.user.isAdmin) {
+      return this.courseService.createCourse(data);
+    } else {
+      return "You're not allowed to do that!";
+    }
   }
 }

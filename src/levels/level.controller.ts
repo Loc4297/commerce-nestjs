@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { LevelService } from './level.service';
 import { CreateLevelDTO } from './dto/create-level.dto';
+import JwtAuthenticationGuard from 'src/auth/guard/jwt-authentication.guard';
 
 @Controller('levels')
 export class LevelController {
@@ -11,8 +12,13 @@ export class LevelController {
     return this.levelService.getAllLevels();
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Post()
-  createSkill(@Body() data: CreateLevelDTO) {
-    return this.levelService.createLevel(data);
+  createSkill(@Body() data: CreateLevelDTO, @Req() request) {
+    if (request.user.isAdmin) {
+      return this.levelService.createLevel(data);
+    } else {
+      return "You're not allowed to do that!";
+    }
   }
 }
