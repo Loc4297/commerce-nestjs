@@ -9,7 +9,7 @@ export class CreateCouponDTO {
   @IsNotEmpty()
   discount: number;
 
-  @IsNotEmpty()
-  @IsDate()
-  expiry: Date;
+  // @IsNotEmpty()
+  // @IsDate()
+  // expiry: Date;
 }

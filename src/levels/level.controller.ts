@@ -2,8 +2,10 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { LevelService } from './level.service';
 import { CreateLevelDTO } from './dto/create-level.dto';
 import JwtAuthenticationGuard from 'src/auth/guard/jwt-authentication.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('levels')
+@ApiTags('levels')
 export class LevelController {
   constructor(private readonly levelService: LevelService) {}
 
@@ -12,6 +14,7 @@ export class LevelController {
     return this.levelService.getAllLevels();
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthenticationGuard)
   @Post()
   createSkill(@Body() data: CreateLevelDTO, @Req() request) {

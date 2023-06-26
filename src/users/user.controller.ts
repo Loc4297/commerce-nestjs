@@ -11,21 +11,25 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 
 @Controller('user')
+@ApiTags('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthenticationGuard)
   @Get()
   getAllUsers(@Req() request) {
     if (request.user.isAdmin) {
       return this.userService.getAllUsers();
     } else {
-      return [];
+      return "You're not allowed to do that!";
     }
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthenticationGuard)
   @Get('me')
   getDetailUser(@Req() request: Request) {

@@ -16,7 +16,7 @@ export class CouponService {
       data: {
         name: data.name,
         discount: data.discount,
-        expiry: data.expiry,
+        // expiry: data.expiry,
       },
     });
     return createCoupon;
