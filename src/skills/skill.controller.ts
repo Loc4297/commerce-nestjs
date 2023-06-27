@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { SkillService } from './skill.service';
 import { CreateSkillDTO } from './dto/create-skill.dto';
 import JwtAuthenticationGuard from 'src/auth/guard/jwt-authentication.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
 @Controller('skills')
 @ApiTags('skills')
@@ -17,6 +17,16 @@ export class SkillController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthenticationGuard)
   @Post()
+  @ApiBody({
+    type: CreateSkillDTO,
+    examples: {
+      skill_1: {
+        value: {
+          name: 'Reading',
+        } as CreateSkillDTO,
+      },
+    },
+  })
   createSkill(@Body() data: CreateSkillDTO, @Req() request) {
     if (request.user.isAdmin) {
       return this.skillService.createSkill(data);
