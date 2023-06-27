@@ -1,13 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  directUrl         = env("DIRECT_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model User {
@@ -18,78 +17,68 @@ model User {
   isAdmin   Boolean? @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  cart  Cart[]
+  cart      Cart[]
 
   @@map("users")
 }
 
 model Cart {
-  id Int @id @default(autoincrement())
-
-  couponId Int?
-  coupons  Coupon? @relation(fields: [couponId], references: [id])
-
+  id                 Int            @id @default(autoincrement())
+  couponId           Int?
   cartTotal          Int
   totalAfterDiscount Float
+  userId             Int
+  createdAt          DateTime       @default(now())
+  coupons            Coupon?        @relation(fields: [couponId], references: [id])
+  user               User           @relation(fields: [userId], references: [id])
+  courses            CourseInCart[]
 
-  userId   Int
-  user  User       @relation(fields: [userId], references: [id])
-  courses CourseInCart[]
-  createdAt DateTime @default(now())
   @@map("carts")
 }
 
 model Course {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  price Int
-
+  id      Int            @id @default(autoincrement())
+  name    String         @unique
+  price   Int
   levelId Int
-  level   Level @relation(fields: [levelId], references: [id])
-
   skillId Int
-  skill   Skill @relation(fields: [skillId], references: [id])
-
-  carts  CourseInCart[]
+  carts   CourseInCart[]
+  level   Level          @relation(fields: [levelId], references: [id])
+  skill   Skill          @relation(fields: [skillId], references: [id])
 
   @@map("courses")
 }
+
 model CourseInCart {
   courseId Int
+  cartId   Int
+  cart     Cart   @relation(fields: [cartId], references: [id])
   courses  Course @relation(fields: [courseId], references: [id])
-
-  cartId Int
-  cart   Cart @relation(fields: [cartId], references: [id])
 
   @@id([courseId, cartId])
   @@map("courseInCart")
 }
 
 model Coupon {
-  id       Int      @id @default(autoincrement())
-  name     String   @unique
+  id       Int    @id @default(autoincrement())
+  name     String @unique
   discount Int
-  // expiry   DateTime @default(now())
-
-  cart Cart[]
+  cart     Cart[]
 
   @@map("coupons")
 }
 
 model Level {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
   courses Course[]
 
   @@map("levels")
 }
 
 model Skill {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
   courses Course[]
 
   @@map("skills")
