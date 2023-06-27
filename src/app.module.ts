@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { dataSourceOptions } from './database/data-source';
-import { TypeOrmModule } from '@nestjs/typeorm';
+// import { dataSourceOptions } from './database/data-source';
+// import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './users/user.module';
 import { SkillModule } from './skills/skill.module';
 import { LevelModule } from './levels/level.module';
@@ -12,7 +12,7 @@ import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(dataSourceOptions),
+    // TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
     SkillModule,
     LevelModule,

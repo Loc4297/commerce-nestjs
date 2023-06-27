@@ -5,7 +5,7 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import PostgresErrorCode from 'src/database/postgresErrorCode.enum';
+// import PostgresErrorCode from 'src/database/postgresErrorCode.enum';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDTO } from './dto/register.dto';
@@ -41,7 +41,8 @@ export class AuthenticationService {
       return user;
     } catch (error) {
       console.log(error);
-      throw new ForbiddenException('User with this email already exists');
+      // throw new ForbiddenException('User with this email already exists');
+      return error;
     }
   }
 
